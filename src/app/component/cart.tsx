@@ -83,9 +83,9 @@ export default function Cart() {
     }
   };
   return (
-    <div className="flex">
-      <div className="w-1/2 mt-10 mr-10 h-[80vh]">
-        <div className="w-full h-full  bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div className="flex gap-10 md:flex-row flex-col">
+      <div className="p-4 w-full ">
+        <div className="w-full h-full  bg-white border border-gray-200 rounded-lg p-8 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">
             <h5 className="text-2xl font-bold leading-none text-gray-900 dark:text-white">
               Latest Products
@@ -146,8 +146,8 @@ export default function Cart() {
           </div>
         </div>
       </div>
-      <div className="w-1/2 mt-10 h-[80vh]">
-        <div className="w-full h-full overflow-scroll  bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div className="p-4 w-full ">
+        <div className="w-full h-full  bg-white border border-gray-200 rounded-lg p-8 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex justify-between border-b pb-8">
             <h1 className="font-semibold text-2xl">Shopping Cart</h1>
             <h2 className="font-semibold text-2xl">{cartItems.length} Items</h2>
