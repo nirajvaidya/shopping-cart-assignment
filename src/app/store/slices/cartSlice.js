@@ -93,17 +93,9 @@ const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        if (action.payload.offer === 1) {
-          existingItem.quantity = existingItem.quantity + 2;
-        } else {
-          existingItem.quantity++;
-        }
+        existingItem.quantity++;
       } else {
-        if (action.payload.offer === 1) {
-          state.cartItems.push({ ...action.payload, quantity: 2 });
-        } else {
-          state.cartItems.push({ ...action.payload, quantity: 1 });
-        }
+        state.cartItems.push({ ...action.payload, quantity: 1 });
       }
     },
 
@@ -115,13 +107,7 @@ const cartSlice = createSlice({
 
     incrementItem(state, action) {
       state.cartItems = state.cartItems.map((item) => {
-        if (
-          item.productId === action.payload.productId &&
-          action.payload.offer === 1
-        ) {
-          item.quantity = item.quantity + 2;
-          return item;
-        } else if (item.productId === action.payload.productId) {
+        if (item.productId === action.payload.productId) {
           item.quantity++;
           return item;
         }
@@ -133,13 +119,7 @@ const cartSlice = createSlice({
       console.log(action.payload);
       state.cartItems = state.cartItems
         .map((item) => {
-          if (
-            item.productId === action.payload.productId &&
-            action.payload.offer === 1
-          ) {
-            item.quantity = item.quantity - 2;
-            return item;
-          } else if (item.productId === action.payload.productId) {
+          if (item.productId === action.payload.productId) {
             item.quantity--;
             return item;
           }

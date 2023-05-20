@@ -63,7 +63,16 @@ export default function Cart() {
   }) => {
     switch(product.offer) {
       case 1: {
-        return (product.salePrice * Math.floor(product.quantity)) / 2;
+        
+        const cartData = cartItems.find((item: { productId: any; })=> item.productId === product.productId)
+        if(cartData?.quantity === 1) {
+          return 0  
+        }
+        if(cartData?.quantity % 2 === 0) {
+          return product.salePrice * (cartData?.quantity/2)
+        } else {        
+          return product.salePrice * ((cartData.quantity - 1)/2)
+        }
       }
       case 2: {
         if(product.isDepend) {
