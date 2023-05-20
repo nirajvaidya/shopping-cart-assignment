@@ -8,7 +8,7 @@ import {
 } from "../store/slices/cartSlice";
 
 export default function Cart() {
-  const { isCartOpen, products, cartItems, currency } = useSelector(
+  const { products, cartItems, currency } = useSelector(
     (state: any) => state?.cart
   );
 
@@ -18,11 +18,11 @@ export default function Cart() {
     return `${currency}${price.toFixed(2)}`;
   };
 
-  const handleIncrement = (productId: number) => {
+  const handleIncrement = (productId: any) => {
     dispatch(incrementItem(productId));
   };
 
-  const handleDecrement = (productId: number) => {
+  const handleDecrement = (productId: any) => {
     dispatch(decrementItem(productId));
   };
 
@@ -31,7 +31,7 @@ export default function Cart() {
   };
   const isProductAddedIntoCart = (productId: number) => {
     const obj = cartItems.find(
-      (item: { productId: number }) => item.productId === productId
+      (item: { productId: number }) => item?.productId === productId
     );
     return Boolean(obj?.quantity);
   };
@@ -57,28 +57,29 @@ export default function Cart() {
     productId: any;
     quantity: number;
     salePrice: number;
+    offer: number;
+    isDepend: boolean,
+    dependentProduct: any
   }) => {
-    switch (product.productId) {
-      // Cheese offers
-      case 3: {
-        if (product.quantity === 3) {
-          return product.salePrice;
-        } else if (product.quantity >= 4) {
-          return product.salePrice * 2;
-        } else {
-          return 0;
-        }
+    switch(product.offer) {
+      case 1: {
+        return (product.salePrice * Math.floor(product.quantity)) / 2;
       }
-      // Butter offers
-      case 5: {
-        if (product.quantity >= 3) {
-          return product.salePrice * Math.floor(product.quantity / 3);
-        } else {
-          return 0;
+      case 2: {
+        if(product.isDepend) {
+          const hasItem = cartItems.some((item: { productId: any; }) => item.productId == product.dependentProduct?.productId)
+          if(hasItem) {
+            return (product.salePrice / 2) * Math.floor(product.quantity);
+          }
         }
-      }
-      default:
         return 0;
+      }
+      case 3: {
+        return (product.salePrice / 3) * Math.floor(product.quantity);;
+      }
+      default: {
+        return 0;
+      }
     }
   };
   return (
@@ -171,7 +172,7 @@ export default function Cart() {
                 return (
                   <div
                     key={index}
-                    className="hover:bg-gray-900 -mx-8 px-6 py-5 "
+                    className="-mx-8 px-6 py-5 "
                   >
                     <div className="flex items-center  ">
                       <div className="flex w-2/5">
@@ -192,7 +193,7 @@ export default function Cart() {
                         <svg
                           className="fill-current w-3"
                           viewBox="0 0 448 512"
-                          onClick={() => handleDecrement(cartItem.productId)}
+                          onClick={() => handleDecrement(cartItem)}
                         >
                           <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                         </svg>
@@ -206,7 +207,7 @@ export default function Cart() {
                         <svg
                           className="fill-current w-3"
                           viewBox="0 0 448 512"
-                          onClick={() => handleIncrement(cartItem.productId)}
+                          onClick={() => handleIncrement(cartItem)}
                         >
                           <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                         </svg>
@@ -224,7 +225,7 @@ export default function Cart() {
                           <div></div>
                           <div>Savings: {getPrice(applyOffer(cartItem))}</div>
                         </div>
-                        <div className="flex justify-between mb-2 text-red-400">
+                        <div className="flex justify-between mb-2">
                           <div></div>
                           <div>
                             Item price:{" "}
@@ -251,7 +252,7 @@ export default function Cart() {
                 <div>Sub Total:</div>
                 <div className="">{getPrice(subTotal())}</div>
               </div>
-              <div className="flex justify-between border-t pt-5 mb-5">
+              <div className="flex justify-between border-t pt-5 mb-5 text-red-400">
                 <div>Savings:</div>
                 <div className="">{getPrice(getSavings())}</div>
               </div>
